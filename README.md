@@ -13,3 +13,7 @@ It makes copies of the files instead of renaming them, so on large quantities of
 - [ ] Add prompt interface for alternative user interaction
 - [ ] Create the output directory if it doesn't exist
 - [ ] Use streams for copying files for better handling of large files
+
+## Attributions
+
+- This was written with debugging and code reviews by Google Gemini
