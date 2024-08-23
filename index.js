@@ -7,27 +7,36 @@ const process = require("node:process");
 const input = process.argv.slice(2);
 
 if (process.argv.length === 2) {
-  console.error("enter arguments in this order: srcDir, outDir, extension");
+  console.error("Run command with the source directory and output directory");
   return;
 }
 
 const srcDir = input[0];
 const outDir = input[1];
-const extension = input[2];
 
-function slugify(file, ext = "webp") {
-  const newName = file.replace(/[^a-zA-Z0-9]+ (?=\.${ext}) /g, "-");
-  return newName.toLowerCase();
+function slugify(file) {
+  const regex = /^[a-zA-Z0-9\s]+\.[a-zA-Z0-9]+$/;
+  if (!regex.test(file)) {
+    throw new Error(`Error: ${file} is not a valid filename`);
+  }
+  const ext = path.extname(file);
+
+  const slugified = file.replace(`/[^a-zA-Z0-9]+ (?=\.${ext}) /g, "-"`);
+  return slugified.toLowerCase();
 }
 
-async function slugifyAllFilesInDirectory(srcDir, outDir, ext) {
-  const files = await fs.readdir(srcDir);
+async function slugifyAllFilesInDirectory(srcDir, outDir) {
+  try {
+    const files = await fs.readdir(srcDir);
 
-  for (const file of files) {
-    const slugifiedName = slugify(file, ext);
-    const oldFile = path.join(srcDir, file);
-    const newFile = path.join(outDir, slugifiedName);
-    await fs.copyFile(oldFile, newFile);
+    for (const file of files) {
+      const slugifiedName = slugify(file, ext);
+      const oldFile = path.join(srcDir, file);
+      const newFile = path.join(outDir, slugifiedName);
+      await fs.copyFile(oldFile, newFile);
+    }
+  } catch (error) {
+    console.error(`Error slugifying files: ${error}`);
   }
 }
-slugifyAllFilesInDirectory(srcDir, outDir, extension);
+slugifyAllFilesInDirectory(srcDir, outDir);
