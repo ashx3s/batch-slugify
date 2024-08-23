@@ -30,10 +30,16 @@ async function slugifyAllFilesInDirectory(srcDir, outDir) {
     const files = await fs.readdir(srcDir);
 
     for (const file of files) {
-      const slugifiedName = slugify(file, ext);
+      const slugifiedName = slugify(file);
       const oldFile = path.join(srcDir, file);
       const newFile = path.join(outDir, slugifiedName);
-      await fs.copyFile(oldFile, newFile);
+      try {
+        await fs.access(newFile);
+        console.warn(`File already exists: ${newFile}. Skipping ...`);
+      } catch (error) {
+        await fs.copyFile(oldFile, newFile);
+        console.log(`Copied ${oldFile} to ${newFile}`);
+      }
     }
   } catch (error) {
     console.error(`Error slugifying files: ${error}`);
