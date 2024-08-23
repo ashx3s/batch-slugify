@@ -10,5 +10,6 @@ It makes copies of the files instead of renaming them, so on large quantities of
 
 ## Needed Features
 
+- [ ] Add prompt interface for alternative user interaction
 - [ ] Create the output directory if it doesn't exist
 - [ ] Use streams for copying files for better handling of large files
