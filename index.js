@@ -15,7 +15,7 @@ const srcDir = input[0];
 const outDir = input[1];
 
 function slugify(file) {
-  const regex = /^[a-zA-Z0-9\s]+\.[a-zA-Z0-9]+$/;
+  const regex = /^[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9]+)?$/;
   if (!regex.test(file)) {
     throw new Error(`Error: ${file} is not a valid filename`);
   }
@@ -42,7 +42,7 @@ async function slugifyAllFilesInDirectory(srcDir, outDir) {
       }
     }
   } catch (error) {
-    console.error(`Error slugifying files: ${error}`);
+    console.error(error);
   }
 }
 slugifyAllFilesInDirectory(srcDir, outDir);
